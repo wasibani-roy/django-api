@@ -4,9 +4,11 @@ from postings.models import BlogPost
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = BlogPost
         fields = [
+            'url',
             'pk',
             'id',
             'user',
@@ -14,7 +16,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             'content',
             'timestamp',
         ]
-        read_only_fields = ['id', 'user', 'pk'] #fields that user cant access
+        read_only_fields = ['user'] #fields that user cant access
 
     # converts to JSON
     # validations for data passed
@@ -26,7 +28,7 @@ class BlogPostSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Title has already been used")
         return value
 
-    # def get_url(self, obj):
-    #     # request
-    #     request = self.context.get("request")
-    #     return obj.get_api_url(request=request)
+    def get_url(self, obj):
+        # request
+        request = self.context.get("request")
+        return obj.get_api_url(request=request)
