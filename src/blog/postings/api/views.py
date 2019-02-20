@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, permissions
 from django.db.models import Q
 from postings.models import BlogPost
 from .permissions import IsOwnerOrReadOnly
@@ -9,6 +9,7 @@ class BlogPostAPIView(mixins.CreateModelMixin, generics.ListAPIView): # DetailVi
     lookup_field            = 'pk'
     serializer_class        = BlogPostSerializer
     #queryset                = BlogPost.objects.all()
+    permission_classes          = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self): #used for doing search of data but basic search
         query_set1 = BlogPost.objects.all()
@@ -30,7 +31,7 @@ class BlogPostAPIView(mixins.CreateModelMixin, generics.ListAPIView): # DetailVi
 class BlogPostRudView(generics.RetrieveUpdateDestroyAPIView): # DetailView CreateView FormView
     lookup_field            = 'pk'
     serializer_class        = BlogPostSerializer
-    # permission_classes      = [IsOwnerOrReadOnly] #permsission to determine who can access what
+    permission_classes      = [IsOwnerOrReadOnly] #permsission to determine who can access what
     # queryset                = BlogPost.objects.all()
 
     def get_queryset(self):

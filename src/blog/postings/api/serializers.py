@@ -4,7 +4,7 @@ from postings.models import BlogPost
 
 
 class BlogPostSerializer(serializers.ModelSerializer):
-    url = serializers.SerializerMethodField(read_only=True)
+    url = serializers.SerializerMethodField(read_only=True) #Allows you access fully qualified URL
     class Meta:
         model = BlogPost
         fields = [
